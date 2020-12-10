@@ -4,7 +4,7 @@
 % functions. The length of the dictionary is not fixed in this
 % implementation.
 
-
+% Comment#2 to test git branch
 clc 
 clear all
 close all
