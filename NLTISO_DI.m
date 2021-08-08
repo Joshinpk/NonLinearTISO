@@ -13,11 +13,12 @@ Data_struct = load(filename,'-mat');
 M_x=Data_struct.m_X;
 noOfNodes        = 24;
 filtOrder        = 2;
-noOfObservations = 250 
+noOfObservations = 800
 order=2;
-gamma=1e-1;
+gamma=1e-2;
 lamda=1/10000000;
 m_X=M_x(:,1:noOfObservations);
+m_X=normalize(m_X,2)
 Ksigma=10;
 Gscale=(1/sqrt(2*pi)/Ksigma);
 alpha=zeros(noOfNodes,noOfNodes,filtOrder,noOfObservations);
@@ -32,7 +33,7 @@ for t=filtOrder+1:noOfObservations
     flag=0;
     for n11=1:noOfNodes
         temp= Gscale*exp(-100*(m_X(n11,t)-m_X(n11,1:t-1)).^2);%find similarity with previous samples
-        if max(temp)<.035 %check weather similarity is grater than treshold
+        if max(temp)<.0388 %check weather similarity is grater than treshold
             if flag==0
                T=T+1;% In crease legth of m_X_Dict
                flag=1;
@@ -66,9 +67,9 @@ for t=filtOrder+1:noOfObservations
 end
 Dict_time=toc;
 Psuedo_Adj_Dict=(sum(alpha.^2,4)).^0.5;
-plot(m_X(18,1:noOfObservations),'LineWidth',2)
+plot(m_X(8,1:noOfObservations),'LineWidth',2)
 hold on
-plot(predt_dict(18,:),'LineWidth',2)
+plot(predt_dict(8,:),'LineWidth',2)
 hold on
 
 %%%%%%%%%%%%%%%
@@ -97,7 +98,7 @@ for t=filtOrder+1:noOfObservations
 end
 Full_Ker_time=toc;
 Psuedo_Adj=(sum(alpha.^2,4)).^0.5;
-plot(predt(18,:),'LineWidth',2)
+plot(predt(7,:),'LineWidth',2)
 legend('original','prediction (dict)','prediction (full)')
 alpha_full=alpha(:);
 Num_samples_Dict=Kernal_Size_Dict(3);
