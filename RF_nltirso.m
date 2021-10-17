@@ -35,7 +35,10 @@ classdef RF_nltirso
             %         ts.m_A = ts.get_m_A(t_A); % turn it into a P*N x N matrix
             RF_ts.coeff=t_alpha;
             RF_ts.m_buffer = flipud(m_first_samples);
-            RF_ts.v=obj.vsigma*obj.vsigma*randn(obj.noOfNodes,obj.filtOrder,D);
+ 
+            for ii=1:obj.noOfNodes
+            RF_ts.v(ii,:,:)=obj.vsigma(ii)*obj.vsigma(ii)*randn(1,obj.filtOrder,D);
+            end
         end
         function [RF_ts_out, alpha, m_B] = update(obj, RF_ts_in, v_y)
             alpha=RF_ts_in.coeff;
@@ -64,7 +67,7 @@ classdef RF_nltirso
          RF_ts_out=RF_ts_in.updateBuffer(v_y);
          RF_ts_out.m_Phi = m_Phi;
          RF_ts_out.m_R   = m_R;
-         
+        %RF_ts_out.eig_value_phi=max(eig((m_Phi )));
             
             for n1=1:obj.noOfNodes
                 
@@ -83,14 +86,14 @@ classdef RF_nltirso
             alpha_temp=zeros(size(g));
             for n2=1:noOfNodes
                 for m=1:order
-                    %          if n2==n1
-                    %                           alpha_temp(n2,m,:)=g(n2,m,:)/eta;
-                    % %
-                    %          else
-                    %
-                   alpha_temp(n2,m,:)=g(n2,m,:)/eta;
-        alpha_temp(n2,m,:)=g(n2,m,:)/eta*max(0,(1-lamda/norm(reshape(g(n2,m,:),1,t))));
-                    %          end
+%                              if n2==n1
+%                                               alpha_temp(n2,m,:)=g(n2,m,:)/eta;
+%                     % %
+%                               else
+%                     %
+                  % alpha_temp(n2,m,:)=g(n2,m,:)/eta;
+        alpha_temp(n2,m,:)=(g(n2,m,:)/eta)*max(0,(1-lamda/norm(reshape(g(n2,m,:),1,t))));
+%                              end
                 end
             end
         end

@@ -6,6 +6,7 @@ classdef RF_nltirso_state
          m_Phi    % PN2D x PN2D matrix
     m_R      % PN2D x N  matrix % collects the N PN-vectors r_n
     t    
+    eig_value_phi
     end
     methods
         function obj = TirsoState(ch_message)
